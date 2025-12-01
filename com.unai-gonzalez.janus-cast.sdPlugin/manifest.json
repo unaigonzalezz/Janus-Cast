@@ -1,0 +1,48 @@
+{
+	"Name": "Janus Cast",
+	"Version": "1.0.0.0",
+	"Author": "Unai Gonzalez",
+	"Actions": [
+		{
+			"Name": "Send Payload",
+			"UUID": "com.unai-gonzalez.janus-cast.send-payload",
+			"Icon": "imgs/actions/send-payload/icon",
+			"Tooltip": "Send a custom payload to a network address with a single press",
+			"PropertyInspectorPath": "ui/send-payload.html",
+			"UserTitleEnabled": false,
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/send-payload/key",
+					"TitleAlignment": "middle"
+				}
+			]
+		}
+	],
+	"Category": "Janus Cast",
+	"CategoryIcon": "imgs/plugin/category-icon",
+	"CodePath": "bin/plugin.js",
+	"Description": "Janus Cast is a Stream Deck plugin that allows you to send custom payloads over TCP or UDP to any IP address, hostname, or domain. It also logs all communication in real time, including server responses, making it ideal for interacting with network services or devices directly from your Stream Deck.",
+	"Icon": "imgs/plugin/marketplace",
+	"SDKVersion": 2,
+	"Software": {
+		"MinimumVersion": "6.5"
+	},
+	"OS": [
+		{
+			"Platform": "mac",
+			"MinimumVersion": "12"
+		},
+		{
+			"Platform": "windows",
+			"MinimumVersion": "10"
+		}
+	],
+	"Nodejs": {
+		"Version": "20",
+		"Debug": "enabled"
+	},
+	"UUID": "com.unai-gonzalez.janus-cast"
+}

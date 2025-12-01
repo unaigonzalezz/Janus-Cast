@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Janus Cast Settings</title>
+    <script src="./js/sdpi-components.js"></script>
+  </head>
+  <body>
+    <sdpi-item label="Name">
+      <sdpi-textfield setting="name" placeholder="Enter payload name"></sdpi-textfield>
+    </sdpi-item>
+
+    <sdpi-item label="IP Address">
+      <sdpi-textfield setting="ip" pattern="^([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(?<!172\.(16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31))(?<!127)(?<!^10)(?<!^0)\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(?<!192\.168)(?<!172\.(16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31))\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$" placeholder="e.g. 192.168.1.100"></sdpi-textfield>
+    </sdpi-item>
+
+    <sdpi-item label="Port">
+      <sdpi-textfield setting="port" value="1234" pattern="[0-9]+" type="number" placeholder="Enter port number"></sdpi-textfield>
+    </sdpi-item>
+
+    <sdpi-item label="Type">
+      <sdpi-radio setting="type" columns="2" default="TCP">
+        <option value="TCP">TCP</option>
+        <option value="UDP">UDP</option>
+      </sdpi-radio>
+    </sdpi-item>
+
+    <sdpi-item label="Payload File">
+      <sdpi-file setting="payload" placeholder="e.g. payload.bin" ></sdpi-file>
+    </sdpi-item>
+    
+    <sdpi-item label="Background Image">
+      <sdpi-file setting="bgImage" accept="image/png, image/jpeg" placeholder="e.g. background.png"></sdpi-file>
+    </sdpi-item>
+
+    <sdpi-item label="Timeout (ms)">
+      <sdpi-textfield setting="timeout" value="2000" placeholder="Enter timeout in milliseconds"></sdpi-textfield>
+    </sdpi-item>
+
+    <sdpi-item label="Display Options">
+      <sdpi-checkbox setting="showName" label="Show Name" default="true"></sdpi-checkbox>
+      <sdpi-checkbox setting="showIp" label="Show IP" default="true"></sdpi-checkbox>
+      <sdpi-checkbox setting="showPort" label="Show Port" default="true"></sdpi-checkbox>
+    </sdpi-item>
+
+    <sdpi-item label="Request Log">
+      <div style="display: flex; gap: 8px; margin-top: 8px;">
+        <sdpi-button onclick="window.open('../janus-cast-logs/janus-cast-requests.html', '_blank')">Open log</sdpi-button>
+        <sdpi-button onclick="clearLogsPersistent()">Clear log</sdpi-button>
+      </div>
+      <p style="margin: 8px 0 0 0; font-size: 11px; opacity: 0.7; color: var(--sdpi-color);">
+        The log opens in your default browser and auto-refreshes periodically.
+      </p>
+    </sdpi-item>
+    <script>
+      function clearLogsPersistent() {
+        try {
+          window.SDPIComponents?.streamDeckClient?.send('sendToPlugin', { event: 'clearLogsPersistent' });
+        } catch (e) {
+          console.error('Failed to send clearLogsPersistent', e);
+        }
+      }
+      window.addEventListener('DOMContentLoaded', () => {
+        try {
+          const payloadEl = document.querySelector('sdpi-file[setting="payload"]');
+          const nameEl = document.querySelector('sdpi-textfield[setting="name"]');
+          if (!payloadEl || !nameEl) return;
+
+          const toBaseName = (p) => {
+            if (!p || typeof p !== 'string') return '';
+            const parts = p.split(/[/\\]/);
+            const file = parts.pop() || '';
+            return file.replace(/\.[^.]*$/, '');
+          };
+
+          payloadEl.addEventListener('valuechange', () => {
+            const base = toBaseName(payloadEl.value);
+            if (base && nameEl.value !== base) {
+              nameEl.value = base;
+            }
+          });
+        } catch (e) {
+          console.error('Auto-rename init error', e);
+        }
+      });
+    </script>
+
+    <sdpi-item label="Support">
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <a href='https://ko-fi.com/X8X4LBFTT' target='_blank'>
+          <img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi1.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' />
+        </a>
+        <p style="margin:0; font-size:12px; line-height:1.4; color: var(--sdpi-color);">
+          If you enjoy my work and want to support me to keep creating useful tools, buy me a coffee! ☕
+          Your support helps me improve my projects and keep them running.
+        </p>
+      </div>
+    </sdpi-item>
+  </body>
+</html>
